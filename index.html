@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Comunidades</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Consulta de Comunidades</h1>
+    <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar por nome da comunidade...">
+    <table id="communitiesTable">
+        <thead>
+            <tr>
+                <!-- Adicione os cabeçalhos das colunas conforme necessário -->
+                <th>Nome da Comunidade</th>
+                <th>Outro Campo</th>
+                <!-- Continue para todos os campos relevantes -->
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Dados serão inseridos aqui -->
+        </tbody>
+    </table>
+
+    <script>
+        // Carregar dados do JSON
+        fetch('comunidades.json')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('tableBody');
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    for (const key in item) {
+                        const cell = document.createElement('td');
+                        cell.textContent = item[key];
+                        row.appendChild(cell);
+                    }
+                    tableBody.appendChild(row);
+                });
+            });
+
+        // Função para filtrar a tabela
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('communitiesTable');
+            const tr = table.getElementsByTagName('tr');
+            for (let i = 1; i < tr.length; i++) {
+                tr[i].style.display = 'none';
+                const td = tr[i].getElementsByTagName('td');
+                for (let j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        if (td[j].textContent.toLowerCase().includes(filter)) {
+                            tr[i].style.display = '';
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html
